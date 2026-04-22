@@ -2,8 +2,6 @@ let filmes = [];
 let editandoId = null;
 let id = 0;
 
-
-
 //create
 function Adicionar(){
     let nome = document.getElementById('titulo').value.trim();
