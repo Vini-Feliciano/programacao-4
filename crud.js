@@ -28,7 +28,7 @@ export function buscarPorId(id){
     return filmes.find(filme=>filme.id == id);
 }
 
-//ATUALIZAR
+//ATUALIZA
 export function atualizar(id,novosDados){
     const index = filmes.findIndex(filme =>filme.id == id);
 
@@ -50,7 +50,7 @@ export function atualizar(id,novosDados){
     return filmes[index];
 }
 
-//DELETAR
+//DELETA
 export function deletar(id){
     const tamanhoOriginal = filmes.length;
     filmes = filmes.filter(f =>f.id !==id);
