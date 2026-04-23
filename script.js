@@ -51,6 +51,9 @@ function Exibir(){
     document.querySelectorAll('.btn-editar').forEach(btn =>{
         btn.addEventListener('click',()=>Editar(btn.dataset.id));
     })
+    document.querySelectorAll('.btn-excluir').forEach(btn =>{
+            btn.addEventListener('click',()=>Excluir(btn.dataset.id));
+        })
 }
 
 function Editar(id){
