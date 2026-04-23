@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url("cinema.jpg") no-repeat fixed center center;
+    background: url("./imagens/cinema.jpg") no-repeat fixed center center;
     background-size: cover;
     padding: 20px;
     min-height: 100vh;
