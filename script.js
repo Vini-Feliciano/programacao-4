@@ -1,33 +1,39 @@
-let filmes = [];
+import {criar, ler, atualizar, deletar, buscarPorId} from './crud.js';
+
 let editandoId = null;
-let id = 0;
 
-//create
 function Adicionar(){
-    let nome = document.getElementById('titulo').value.trim();
-    let genero = document.getElementById('genero').value;
+    const nome = document.getElementById('titulo').value.trim();
+    const genero = document.getElementById('genero').value;
 
-    if(nome == ''){
+    if(nome==''){
         alert('Digite o título do filme!');
         return;
     }
 
-    const novoFilme = {
-        id: id++,
-        nome: nome,
-        genero: genero
-    };
+    //crud
+    try{
+        if(editandoId == null){
+            criar(nome,genero);
 
-    filmes.push(novoFilme);
-    document.getElementById('titulo').value = '';
-    document.getElementById('genero').value = 'Ação';
+        }else{
+            atualizar(editandoId,{nome: nome,genero: genero});
+            cancelarEdicao();
+        }
+    limparFormulario();
     Exibir();
+
+    } catch(error){
+        alert('Erro: '+error.message);
+    }
 }
 
-//read
 function Exibir(){
     const tbody = document.getElementById('corpoTabela');
     tbody.innerHTML='';
+
+    //crud
+    const filmes = ler();
 
     filmes.forEach(filme =>{
         const tr = document.createElement('tr');
@@ -35,61 +41,62 @@ function Exibir(){
             <td>${filme.nome}</td>
             <td>${filme.genero}</td>
             <td>
-            <button onclick="Editar(${filme.id})">✏️ EDITAR</button>
-            <button onclick="Excluir(${filme.id})">❌ EXCLUIR</button>
+            <button class="btn-editar" data-id="${filme.id}">✏️ EDITAR</button>
+            <button class="btn-excluir" data-id="${filme.id}">❌ EXCLUIR</button>
             </td>
         `;
         tbody.appendChild(tr);
     });
+
+    document.querySelectorAll('.btn-editar').forEach(btn =>{
+        btn.addEventListener('click',()=>Editar(btn.dataset.id));
+    })
+    document.querySelectorAll('.btn-excluir').forEach(btn =>{
+            btn.addEventListener('click',()=>Excluir(btn.dataset.id));
+        })
 }
 
-//update
 function Editar(id){
-    const filme = filmes.find(f=>f.id == id);
-    document.getElementById('titulo').value = filme.nome;
-    document.getElementById('genero').value = filme.genero;
+    //crud
+    const filme = buscarPorId(id);
 
-    editandoId = id;
+    if(filme){
+        document.getElementById('titulo').value = filme.nome;
+        document.getElementById('genero').value=filme.genero;
 
-    const btn = document.getElementById('btnAdicionar');
-    btn.textContent = '💾 SALVAR EDIÇÃO';
-}
-//update 2
-function Salvar(){
-    const nomeNovo = document.getElementById('titulo').value.trim();
-    const generoNovo = document.getElementById('genero').value;
+        editandoId = id;
 
-    if (nomeNovo == '') {
-    alert('Digite o título do filme!');
-    return;
+        const btn = document.getElementById('btnAdicionar');
+        if (btn) btn.textContent = '💾 SALVAR EDIÇÃO';
     }
-
-    const index = filmes.findIndex(f => f.id == editandoId);
-    filmes[index].nome = nomeNovo;
-    filmes[index].genero = generoNovo
-
-    document.getElementById('titulo').value = '';
-    document.getElementById('genero').value = 'Ação';
-
-    const btn = document.getElementById('btnAdicionar');
-    btn.textContent = 'ADICIONAR';
-    editandoId = null;
-
-    Exibir();
 }
 
-//delete
+//deletar
 function Excluir(id){
+    //crud
     if(confirm('Tem certeza que quer remover este filme?')){
-    filmes = filmes.filter(f=> f.id !== id);
+    deletar(id);
+    if(editandoId==id){
+        cancelarEdicao();
+    }
+    limparFormulario();
     Exibir();
     }
 }
 
-document.getElementById('btnAdicionar').onclick = function(){
-    if (editandoId == null){
-        Adicionar();
-    } else {
-        Salvar();
-    }
+//outras funções
+function cancelarEdicao() {
+    editandoId = null;
+    const btn = document.getElementById('btnAdicionar');
+    if (btn) btn.textContent = 'ADICIONAR';
 }
+
+function limparFormulario() {
+    const nome = document.getElementById('titulo');
+    const genero = document.getElementById('genero');
+    
+    if (nome) nome.value = '';
+    if (genero) genero.value = 'Ação';
+}
+
+document.getElementById('btnAdicionar').addEventListener('click', Adicionar);
