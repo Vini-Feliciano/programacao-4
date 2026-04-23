@@ -77,7 +77,7 @@ nav {
   background:
     radial-gradient(ellipse 80% 60% at 50% 110%, rgba(192,57,43,.35) 0%, transparent 70%),
     radial-gradient(ellipse 50% 40% at 50% 100%, rgba(14,11,11,1) 40%, transparent 100%),
-    url('cinema.jpeg') center/cover no-repeat;
+    url('../programacao-4/imagens/cinemaLP.jpeg') center/cover no-repeat;
 }
 
 .hero::after {
