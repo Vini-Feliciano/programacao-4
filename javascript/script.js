@@ -1,4 +1,4 @@
-import {criar, ler, atualizar, deletar, buscarPorId} from './crud.js';
+import {criar, ler, atualizar, deletar, buscarPorId} from './api.js';
 
 let editandoId = null;
 
@@ -14,27 +14,30 @@ function Adicionar(){
     //crud
     try{
         if(editandoId == null){
-            criar(nome,genero);
-
-        }else{
+            criar(nome,genero)
+            .then(function(novoFilme){
+                limparFormulario();
+                alert('Filme criado com sucesso!');
+                Exibir();
+            });
+        }
+        else{
             atualizar(editandoId,{nome: nome,genero: genero});
             cancelarEdicao();
         }
-    limparFormulario();
-    Exibir();
-
+    
     } catch(error){
         alert('Erro: '+error.message);
     }
 }
 
-function Exibir(){
+async function Exibir(){
     const tbody = document.getElementById('corpoTabela');
     tbody.innerHTML='';
 
     //crud
-    const filmes = ler();
-
+    const filmes = await ler();
+    console.log(filmes);
     filmes.forEach(filme =>{
         const tr = document.createElement('tr');
         tr.innerHTML=`

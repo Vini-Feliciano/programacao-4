@@ -33,7 +33,7 @@ def get_filme(id):
 
 @app.route('/api/filmes/<int:id>', methods=['PUT'])
 def update_filme(id):
-    dados = request.json
+    dados = request.get_json()
     try:
         filme_atualizado = atualizar(id,dados)
         return jsonify(filme_atualizado)
