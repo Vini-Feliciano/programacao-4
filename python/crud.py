@@ -16,7 +16,7 @@ class Filme(Base):
 
     def to_dict(self):
         return{
-            'id': self.id,
+            'id':self.id,
             'nome': self.nome,
             'genero': self.genero
         }
