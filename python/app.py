@@ -8,7 +8,7 @@ CORS(app)
 
 @app.route('/api/filmes', methods=['GET'])
 def get_filmes():
-    return jsonify(ler())
+    return jsonify([filme.to_dict() for filme in ler()])
 
 @app.route('/api/filmes', methods=['POST'])
 def create_filme():
@@ -19,7 +19,7 @@ def create_filme():
             dados.get('nome'),
             dados.get('genero')
         )
-        return jsonify(novo_filme),201
+        return jsonify(novo_filme.to_dict()),201
     except ValueError as e:
         return jsonify({'erro': str(e)}),400
 
@@ -28,7 +28,7 @@ def get_filme(id):
     filme = buscar_por_id(id)
 
     if filme:
-        return jsonify(filme)
+        return jsonify(filme.to_dict())
     return jsonify({'erro': 'filme não encontrado'}),404
 
 @app.route('/api/filmes/<int:id>', methods=['PUT'])
@@ -36,7 +36,7 @@ def update_filme(id):
     dados = request.get_json()
     try:
         filme_atualizado = atualizar(id,dados)
-        return jsonify(filme_atualizado)
+        return jsonify(filme_atualizado.to_dict())
     except ValueError as e:
         return jsonify({'erro': str(e)}),404
 

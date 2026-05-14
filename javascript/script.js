@@ -59,9 +59,9 @@ async function Exibir(){
         })
 }
 
-function Editar(id){
+async function Editar(id){
     //crud
-    const filme = buscarPorId(id);
+    const filme = await buscarPorId(id);
 
     if(filme){
         document.getElementById('titulo').value = filme.nome;
@@ -75,15 +75,15 @@ function Editar(id){
 }
 
 //deletar
-function Excluir(id){
+async function Excluir(id){
     //crud
     if(confirm('Tem certeza que quer remover este filme?')){
-    deletar(id);
+    await deletar(id);
     if(editandoId==id){
         cancelarEdicao();
     }
     limparFormulario();
-    Exibir();
+    await Exibir();
     }
 }
 
