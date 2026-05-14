@@ -23,7 +23,6 @@ class Filme(Base):
 
 Base.metadata.create_all(engine)
 
-
 #CRIAR
 def criar(nome,genero):
 
