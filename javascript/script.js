@@ -22,8 +22,13 @@ function Adicionar(){
             });
         }
         else{
-            atualizar(editandoId,{nome: nome,genero: genero});
-            cancelarEdicao();
+            atualizar(editandoId,{nome: nome,genero: genero})
+            .then(function(){
+                cancelarEdicao();
+                limparFormulario();
+                alert('Filme atualizado com sucesso!');
+                Exibir();
+            });
         }
     
     } catch(error){
@@ -101,5 +106,5 @@ function limparFormulario() {
     if (nome) nome.value = '';
     if (genero) genero.value = 'Ação';
 }
-
+Exibir();
 document.getElementById('btnAdicionar').addEventListener('click', Adicionar);

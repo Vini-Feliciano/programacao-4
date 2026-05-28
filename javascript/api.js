@@ -1,4 +1,4 @@
-const urlBase = 'http://127.0.0.1:5000/api/filmes';
+const urlBase = 'http://127.0.0.1:3000/api/filmes';
 
 // CRIAR
 export function criar(nome, genero) {
