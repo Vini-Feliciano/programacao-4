@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../estilos/authEstilo.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>🎬 Login</h1>
+        <input type="email" id="email" placeholder="Seu e-mail">
+        <input type="password" id="senha" placeholder="Sua senha">
+        <button id="btnLogin">Entrar</button>
+        <p>Não tem conta? <a href="cadastro.html">Cadastrar</a></p>
+    </div>
+
+    <script type="module">
+        import { login } from '../javascript/auth.js';
+
+        document.getElementById('btnLogin').addEventListener('click', () => {
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+
+            try {
+                const usuario = login(email, senha);
+                // Futuramente: salvar JWT aqui
+                sessionStorage.setItem('usuarioLogado', usuario.email);
+                window.location.href = 'lista.html';
+            } catch (e) {
+                alert('Erro: ' + e.message);
+            }
+        });
+    </script>
+</body>
+</html>
