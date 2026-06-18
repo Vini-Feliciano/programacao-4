@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <script type="module" src="script.js" defer></script>
+    <title>Lista de filmes</title>
+
+
+</head>
+<body>
+<div class="container">
+
+    <nav class="navbar">
+        <span class="brand">MENU</span>
+        <div class="nav-links">
+            <a href="/">🏠 Início</a>
+            <a href="/lista">🎬 Filmes</a>
+        </div>
+    </nav>
+
+    <h1>Lista de Filmes</h1>
+    <div>
+        <input type="text" id="titulo" placeholder="Título do filme" required>
+        <select id="genero">
+            <option value="" disabled selected hidden>Selecione o Gênero</option>
+            <option value="Ação">🔥 AÇÃO</option>
+            <option value="Comédia">😂 COMÉDIA</option>
+            <option value="Drama">🎭 DRAMA</option>
+            <option value="Terror">👻 TERROR</option>
+            <option value="Ficção">🚀 FICÇÃO</option>
+            <option value="Romance">💖 ROMANCE</option>
+            <option value="Crime">🔪 CRIME</option>
+        </select>
+        <button id="btnAdicionar">Adicionar</button>
+        <button id="btnCancelar" style="display: none;">Cancelar</button>
+
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Título</th>
+            <th>Gênero</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody id="corpoTabela"></tbody>
+
+    </table>
+
+</div>
+</body>
+</html>
