@@ -33,7 +33,6 @@
 
                 if (!response.ok) throw new Error(dados.error || 'Erro ao logar');
 
-                // Futuramente: salvar JWT aqui
                 sessionStorage.setItem('usuarioLogado', dados.email);
                 window.location.href = 'lista.html';
             } catch (e) {
