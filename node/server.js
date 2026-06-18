@@ -1,65 +1,78 @@
 const express = require('express');
 const cors = require('cors');
-const { criar, ler, buscarPorId, atualizar, deletar } = require('./crud');
+const CRUD = require('./crud');
+const AUTH = require('./authCrud');
 
 const app = express();
+const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// GET /api/filmes — retorna todos os filmes
-app.get('/api/filmes', (req, res) => {
-    return res.json(ler());
+
+app.get('/filmes', async (req, res) => {
+    const filmes = await CRUD.listar();
+    res.json(filmes);
 });
 
-// POST /api/filmes — cria um novo filme
-app.post('/api/filmes', (req, res) => {
-    const dados = req.body;
+app.get('/filmes/:id', async (req, res) => {
+    const filme = await CRUD.buscarPorId(parseInt(req.params.id));
+    if (!filme) return res.status(404).json({ error: 'Filme não encontrado' });
+    res.json(filme);
+});
+
+app.post('/filmes', async (req, res) => {
+    const { nome, genero } = req.body;
+    if (!nome || !genero) return res.status(400).json({ error: 'Nome e gênero são obrigatórios' });
+    const filme = await CRUD.criar(nome, genero);
+    res.status(201).json(filme);
+});
+
+app.put('/filmes/:id', async (req, res) => {
+    const { nome, genero } = req.body;
+    const filme = await CRUD.atualizar(parseInt(req.params.id), nome, genero);
+    if (!filme) return res.status(404).json({ error: 'Filme não encontrado' });
+    res.json(filme);
+});
+
+app.delete('/filmes/:id', async (req, res) => {
+    await CRUD.deletar(parseInt(req.params.id));
+    res.status(204).send();
+});
+
+
+app.post('/auth/cadastro', async (req, res) => {
+    const { email, senha } = req.body;
+    if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
     try {
-        const novoFilme = criar(dados.nome, dados.genero);
-        return res.status(201).json(novoFilme);
+        const usuario = await AUTH.cadastrar(email, senha);
+        res.status(201).json({ message: 'Usuário cadastrado com sucesso', id: usuario.id });
     } catch (e) {
-        return res.status(400).json({ erro: e.message });
+        res.status(400).json({ error: e.message });
     }
 });
 
-// GET /api/filmes/:id — retorna um filme pelo id
-app.get('/api/filmes/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const filme = buscarPorId(id);
-
-    if (filme) {
-        return res.json(filme);
-    }
-    return res.status(404).json({ erro: 'filme não encontrado' });
-});
-
-// PUT /api/filmes/:id — atualiza um filme pelo id
-app.put('/api/filmes/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const dados = req.body;
+app.post('/auth/login', async (req, res) => {
+    const { email, senha } = req.body;
+    if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
     try {
-        const filmeAtualizado = atualizar(id, dados);
-        return res.json(filmeAtualizado);
+        const usuario = await AUTH.login(email, senha);
+        // Futuramente: retornar JWT aqui
+        res.json({ message: 'Login realizado com sucesso', email: usuario.email });
     } catch (e) {
-        return res.status(404).json({ erro: e.message });
+        res.status(401).json({ error: e.message });
     }
 });
 
-// DELETE /api/filmes/:id — deleta um filme pelo id
-app.delete('/api/filmes/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-
-    try {
-        deletar(id);
-        return res.status(200).json({ mensagem: 'filme deletado com sucesso' });
-    } catch (e) {
-        return res.status(404).json({ erro: e.message });
-    }
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-app.listen(3000, () => {
-    console.log('Servidor rodando em http://localhost:3000');
+process.on('SIGINT', async () => {
+    console.log('Encerrando servidor...');
+    await CRUD.fecharConexao();
+    process.exit(0);
 });

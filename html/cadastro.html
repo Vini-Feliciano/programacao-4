@@ -16,14 +16,23 @@
     </div>
 
     <script type="module">
-        import { cadastrar } from '../javascript/auth.js';
+        const urlBase = 'http://localhost:3000/auth';
 
-        document.getElementById('btnCadastrar').addEventListener('click', () => {
+        document.getElementById('btnCadastrar').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
 
             try {
-                cadastrar(email, senha);
+                const response = await fetch(urlBase + '/cadastro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await response.json();
+
+                if (!response.ok) throw new Error(dados.error || 'Erro ao cadastrar');
+
                 alert('Cadastro realizado! Faça login.');
                 window.location.href = 'login.html';
             } catch (e) {

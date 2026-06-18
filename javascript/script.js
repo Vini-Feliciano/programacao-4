@@ -11,6 +11,11 @@ function Adicionar(){
         return;
     }
 
+    if(genero==''){
+        alert('Selecione o gênero do filme!');
+        return;
+    }
+
     //crud
     try{
         if(editandoId == null){

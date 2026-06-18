@@ -16,16 +16,25 @@
     </div>
 
     <script type="module">
-        import { login } from '../javascript/auth.js';
+        const urlBase = 'http://localhost:3000/auth';
 
-        document.getElementById('btnLogin').addEventListener('click', () => {
+        document.getElementById('btnLogin').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
 
             try {
-                const usuario = login(email, senha);
+                const response = await fetch(urlBase + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await response.json();
+
+                if (!response.ok) throw new Error(dados.error || 'Erro ao logar');
+
                 // Futuramente: salvar JWT aqui
-                sessionStorage.setItem('usuarioLogado', usuario.email);
+                sessionStorage.setItem('usuarioLogado', dados.email);
                 window.location.href = 'lista.html';
             } catch (e) {
                 alert('Erro: ' + e.message);

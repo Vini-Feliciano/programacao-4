@@ -1,4 +1,4 @@
-const urlBase = 'http://127.0.0.1:3000/api/filmes';
+const urlBase = 'http://localhost:3000/filmes';
 
 // CRIAR
 export function criar(nome, genero) {
@@ -59,6 +59,6 @@ export function deletar(id) {
     })
     .then(response => {
         if (!response.ok) throw new Error('Erro ao deletar filme: ' + response.statusText);
-        return response.json();
+        return true;
     });
 }
