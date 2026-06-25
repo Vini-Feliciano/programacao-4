@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="../estilos/estilo.css">
     <script type="module" src="../javascript/script.js" defer></script>
     <title>Lista de filmes</title>
-
-
 </head>
 <body>
 <div class="container">
-    <h1>Lista de Filmes</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h1 style="margin-bottom: 0; border-bottom: none;">Lista de Filmes</h1>
+        <button id="btnSair" style="padding: 10px 20px; background: #5a1a1a; color: #ff9999; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; letter-spacing: 1px;">🚪 SAIR</button>
+    </div>
     <div>
         <input type="text" id="titulo" placeholder="Título do filme" required>
         <select id="genero">
@@ -24,7 +25,6 @@
             <option value="Romance">💖 ROMANCE</option>
         </select>
         <button id="btnAdicionar">Adicionar</button>
-
     </div>
     <table>
         <thead>
@@ -34,11 +34,20 @@
             <th>Ações</th>
         </tr>
         </thead>
-
         <tbody id="corpoTabela"></tbody>
-
     </table>
-
 </div>
+
+<script type="module">
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('btnSair').addEventListener('click', () => {
+        sessionStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
+</script>
 </body>
 </html>

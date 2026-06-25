@@ -1,5 +1,9 @@
 const urlBase = 'http://localhost:3000/filmes';
 
+function getToken() {   // Função para pegar o token do sessionStorage
+    return sessionStorage.getItem('token');     // Retorna o token armazenado no sessionStorage
+}
+
 // CRIAR
 export function criar(nome, genero) {
     if (!nome || nome.trim() == '') {
@@ -8,7 +12,10 @@ export function criar(nome, genero) {
 
     return fetch(urlBase, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + getToken()
+        },
         body: JSON.stringify({ nome: nome.trim(), genero: genero })
     })
     .then(response => {
@@ -19,7 +26,11 @@ export function criar(nome, genero) {
 
 // LER
 export function ler() {
-    return fetch(urlBase)
+    return fetch(urlBase, {
+        headers: {
+            "Authorization": "Bearer " + getToken()     // envia o token no header da requisição, para que o servidor possa validar.
+        }
+    })
     .then(response => {
         if (!response.ok) throw new Error('Erro ao listar filmes: ' + response.statusText);
         return response.json();
@@ -28,7 +39,11 @@ export function ler() {
 
 // BUSCAR POR ID
 export function buscarPorId(id) {
-    return fetch(urlBase + `/${id}`)
+    return fetch(urlBase + `/${id}`, {
+        headers: {
+            "Authorization": "Bearer " + getToken()     // envia o token no header da requisição, para que o servidor possa validar!
+        }
+    })
     .then(response => {
         if (!response.ok) throw new Error('Erro ao buscar filme: ' + response.statusText);
         return response.json();
@@ -43,7 +58,10 @@ export function atualizar(id, novosDados) {
 
     return fetch(urlBase + `/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + getToken()     // envia o token no header da requisição, para que o servidor possa validar!
+        },
         body: JSON.stringify({ nome: novosDados.nome.trim(), genero: novosDados.genero })
     })
     .then(response => {
@@ -55,7 +73,10 @@ export function atualizar(id, novosDados) {
 // DELETAR
 export function deletar(id) {
     return fetch(urlBase + `/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+            "Authorization": "Bearer " + getToken()     // envia o token no header da requisição, para que o servidor possa validar!
+        }
     })
     .then(response => {
         if (!response.ok) throw new Error('Erro ao deletar filme: ' + response.statusText);

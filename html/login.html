@@ -16,29 +16,31 @@
     </div>
 
     <script type="module">
-        const urlBase = 'http://localhost:3000/auth';
+    const urlBase = 'http://localhost:3000/auth';
 
-        document.getElementById('btnLogin').addEventListener('click', async () => {
-            const email = document.getElementById('email').value.trim();
-            const senha = document.getElementById('senha').value;
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value;
 
-            try {
-                const response = await fetch(urlBase + '/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, senha })
-                });
+        try {
+            const response = await fetch(urlBase + '/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, senha })
+            });
 
-                const dados = await response.json();
+            const dados = await response.json();
 
-                if (!response.ok) throw new Error(dados.error || 'Erro ao logar');
+            if (!response.ok) throw new Error(dados.error || 'Erro ao logar');
 
-                sessionStorage.setItem('usuarioLogado', dados.email);
-                window.location.href = 'lista.html';
-            } catch (e) {
-                alert('Erro: ' + e.message);
-            }
-        });
+            // Salva o token no sessionStorage para usar nas próximas requisições
+            sessionStorage.setItem('token', dados.token);
+
+            window.location.href = 'lista.html';
+        } catch (e) {
+            alert('Erro: ' + e.message);
+        }
+    });
     </script>
 </body>
 </html>
